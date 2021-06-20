@@ -1,0 +1,87 @@
+== Heap
+
+本质上是完全二叉树，顺序存储， 在插入或删除数据时自动上浮或下沉，使得堆保持有序.
+
+=== 最大堆
+
+任何一个父节点都大于等于他的左、右孩子节点。
+
+=== 最小堆
+
+任何一个父节点都小于等于他的左、右孩子节点。
+
+=== 操作
+
+* 插入
+* 删除
+* 构建
+
+==== 插入
+
+. 将新元素 append 至堆末尾
+. 循环与父节点比较，判断是否替换
+
+==== 删除
+
+. 删除根元素
+. 将最后一个元素移动至根
+. 循环与左右孩子比较，判断是否下沉
+
+==== 构建
+
+从最后一个非叶子节点开始循环判断是否需要下沉
+
+=== index 关系
+
+```
+left_child_idx = parent_idx * 2 + 1
+right_child_idx = parent_idx * 2 + 2
+```
+
+left_child_idx 为奇数， right_child_idx 为偶数
+
+
+=== 关键代码
+
+==== 最小堆
+
+.插入
+```
+heap_list.append(new_data)
+
+child_idx = len(heap_list) - 1
+parent_idx = (child_idx - 1) / 2 if child_idx % 2 else (child_idx - 2) / 2
+while child_idx > 0 and heap[child_idx] < heap[parent_idx]:
+    heap[child_idx], heap[parent_idx] = heap[parent_idx], heap[child_idx]
+    child_idx = parent_idx
+    parent_idx = (child_idx - 1) / 2 if child_idx % 2 else (child_idx - 2) / 2
+```
+
+.删除
+```
+output = heap_list.pop(0)
+
+heap_list.insert(0, heap_list.pop())
+parent_idx = 0
+left_child_idx = parent_idx * 2 + 1
+right_child_idx = left_child_idx + 1
+
+while left_child_idx < len(heap_list):
+    if right_child_idx < len(heap_list):
+        min_child = min(heap_list[left_child_idx], heap_list[right_child_idx])
+        if min_child < heap_list[parent_idx]:
+            if heap_list[left_child_idx] < heap_list[right_child_idx]:
+                heap_list[parent_idx], heap_list[left_child_idx] = heap_list[left_child_idx], heap_list[parent_idx]
+                parent_idx = left_child_idx
+            else:
+                heap_list[parent_idx], heap_list[right_child_idx] = heap_list[right_child_idx], heap_list[parent_idx]
+                parent_idx = right_child_idx
+    else:
+        if heap_list[left_child_idx] < heap_list[parent_idx]:
+            heap_list[parent_idx], heap_list[left_child_idx] = heap_list[left_child_idx], heap_list[parent_idx]
+            parent_idx = left_child_idx
+    left_child_idx = parent_idx * 2 + 1
+    right_child_idx = left_child_idx + 1
+```
+
+

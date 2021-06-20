@@ -28,24 +28,23 @@ class Tree(object):
             return None
 
         q = Queue()
-        level = 1
         data = alist.pop(0)
         root = TreeNode(data)
         q.put(root)
 
         while alist:
-            for _ in range(2**(level - 1)):
+            while not q.isEmpty():
                 node = q.get()
                 for i in range(2):
                     if alist:
                         child_data = alist.pop(0)
+                        # if child_data:
                         child_node = TreeNode(child_data)
                         if i % 2 == 0:
                             node.left_child = child_node
                         else:
                             node.right_child = child_node
                         q.put(child_node)
-                level += 1
 
         return root
 
@@ -107,8 +106,25 @@ class Tree(object):
             return not node.left_child and not node.right_child
 
     @classmethod
-    def is_complete_binary_tree(node):
-        pass
+    def is_complete_binary_tree(self, node):
+        return all(Tree.toList(node))
+
+    @staticmethod
+    def toList(node):
+        result = []
+        if not node:
+            return result
+        q = Queue()
+        q.put(node)
+        while not q.isEmpty():
+            node = q.get()
+            result.append(node.data)
+            if node and node.left_child:
+                q.put(node.left_child)
+            if node and node.right_child:
+                q.put(node.right_child)
+
+        return result
 
 
 class Queue(object):
@@ -128,41 +144,35 @@ class Queue(object):
         return len(self._container)
 
 
+def test_tree(alist):
+    print("======================================")
+    temp_alist = alist[:]
+    tree = Tree.create_from_list(temp_alist)
+    print(f"Max depth: {Tree.max_depth(tree)}")
+    print(f"Is full: {Tree.is_full_binary_tree(tree)}")
+    print(f"Is complete: {Tree.is_complete_binary_tree(tree)}")
+    print(f"originList: {alist}")
+    print(f"treetoList: {Tree.toList(tree)}")
+    print("\npre_order_traverse:")
+    Tree.pre_order_traverse(tree)
+    print("\nin_order_traverse:")
+    Tree.in_order_traverse(tree)
+    print("\npost_order_traverse:")
+    Tree.post_order_traverse(tree)
+    print("\nbreadth_first_traverse:")
+    Tree.breadth_first_traverse(tree)
+
+
 if __name__ == "__main__":
-    print("======================================")
-    alist = [1, 2, 3, 4, 5, 6, 7]
-    temp_alist = alist[:]
-    tree = Tree.create_from_list(temp_alist)
-    print(f"Max depth: {Tree.max_depth(tree)}")
-    print(f"Is full: {Tree.is_full_binary_tree(tree)}")
-    print("======================================")
-    alist = [1, 2, 3, 4, 5, None, 6]
-    temp_alist = alist[:]
-    tree = Tree.create_from_list(temp_alist)
-    print(f"Max depth: {Tree.max_depth(tree)}")
-    print(f"Is full: {Tree.is_full_binary_tree(tree)}")
-    print("\npre_order_traverse:")
-    Tree.pre_order_traverse(tree)
-    print("\nin_order_traverse:")
-    Tree.in_order_traverse(tree)
-    print("\npost_order_traverse:")
-    Tree.post_order_traverse(tree)
-    print("\nbreadth_first_traverse:")
-    Tree.breadth_first_traverse(tree)
-    print("======================================")
-    alist = [10, 9, 8, 4, 5, None, 6, 50, 60, 70, None, 80, 90, 55, 65]
-    temp_alist = alist[:]
-    tree = Tree.create_from_list(temp_alist)
-    print(f"Max depth: {Tree.max_depth(tree)}")
-    print(f"Is full: {Tree.is_full_binary_tree(tree)}")
-    print("\npre_order_traverse:")
-    Tree.pre_order_traverse(tree)
-    print("\nin_order_traverse:")
-    Tree.in_order_traverse(tree)
-    print("\npost_order_traverse:")
-    Tree.post_order_traverse(tree)
-    print("\nbreadth_first_traverse:")
-    Tree.breadth_first_traverse(tree)
+    alist0 = [1, 2, 3, 4, 5, 6, 7, 8]
+    alist1 = [1, 2, 3, 4, 5, 6, 7]
+    alist2 = [1, 2, 3, 4, 5, None, 6]
+    alist3 = [10, 9, 8, 4, 5, None, 6, 50, 60, 70, None, 80, 90, 55, 65]
+
+    test_tree(alist0)
+    test_tree(alist1)
+    test_tree(alist2)
+    test_tree(alist3)
 
     from IPython import embed
 

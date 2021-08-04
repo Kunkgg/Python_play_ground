@@ -1,4 +1,6 @@
 # -*- utf-8
+import os
+import shutil
 
 
 class TreeNode(object):
@@ -164,6 +166,8 @@ def test_tree(alist):
 
 
 if __name__ == "__main__":
+    print(os.sys)
+    print(shutil)
     alist0 = [1, 2, 3, 4, 5, 6, 7, 8]
     alist1 = [1, 2, 3, 4, 5, 6, 7]
     alist2 = [1, 2, 3, 4, 5, None, 6]
@@ -173,7 +177,3 @@ if __name__ == "__main__":
     test_tree(alist1)
     test_tree(alist2)
     test_tree(alist3)
-
-    from IPython import embed
-
-    embed()
